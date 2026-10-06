@@ -64,7 +64,7 @@ function parseSample(sample) {
 // 3. Inference Engine with Probability/Confidence Score Calculation
 async function predictSample(features, actualLabel) {
   let isMalicious = false;
-  let probability = 0.5; // Default 50%
+  let probability = 0.5;
 
   if (onnxSession && !isOfflineFallbackMode) {
     const inputName = onnxSession.inputNames[0];
@@ -81,7 +81,6 @@ async function predictSample(features, actualLabel) {
         const data = output.data;
         if (data.length === 1) {
           const rawVal = Number(data[0]);
-          // If raw logit, apply sigmoid function
           probability = rawVal > 1 || rawVal < 0 ? 1 / (1 + Math.exp(-rawVal)) : rawVal;
           isMalicious = probability >= 0.5;
           break;
@@ -113,7 +112,7 @@ async function predictSample(features, actualLabel) {
       }
     }
   } else {
-    // Presentation Offline Mode - Realistically calculated confidence (84% - 98%)
+    // Presentation Offline Mode
     const confidenceRange = 0.84 + (Math.random() * 0.14);
     const isCorrect = Math.random() > 0.11;
 
@@ -126,7 +125,6 @@ async function predictSample(features, actualLabel) {
     }
   }
 
-  // Target probability corresponds to the predicted class confidence
   const confidenceScore = isMalicious ? probability : (1 - probability);
 
   return {
@@ -142,7 +140,6 @@ function updateBadge(elementId, text) {
 
   el.textContent = text;
   
-  // Retain custom styling if confidence score
   if (elementId === 'confidence-score') {
     el.className = 'badge badge-info';
     return;
@@ -165,6 +162,9 @@ async function handlePredictClick() {
 
   try {
     const randomItem = samplesList[Math.floor(Math.random() * samplesList.length)];
+
+    // Log selected sample object to DevTools Console
+    console.log('Sample picked from demo_samples.json:', randomItem);
 
     const { label, features } = parseSample(randomItem);
     const result = await predictSample(features, label);
@@ -198,6 +198,7 @@ async function initDashboard() {
     if (samplesRes.ok) {
       const data = await samplesRes.json();
       samplesList = Array.isArray(data) ? data : (data.samples || data.data || []);
+      console.log(`Loaded ${samplesList.length} samples from demo_samples.json`);
     }
   } catch (e) {
     console.error('Failed to load demo_samples.json:', e);
