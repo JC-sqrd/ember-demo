@@ -44,7 +44,12 @@
       
       <div class="inference-card">
         <div class="prediction-results">
-          <div class="result-box">
+            <!-- Added Confidence Result Box -->
+            <div class="result-box">
+                <span class="result-title">Model Confidence</span>
+                <span class="badge badge-info" id="confidence-score">--</span>
+            </div>
+            <div class="result-box">
             <span class="result-title">Actual Ground Truth</span>
             <span class="badge" id="actual-label">--</span>
           </div>
