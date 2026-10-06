@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ember Demo Dashboard</title>
+  
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📊</text></svg>">
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Load local ONNX Runtime library -->
+  <script src="libs/ort.min.js"></script>
+</head>
+<body>
+  <div class="dashboard-container">
+    <header class="dashboard-header">
+      <h1>Model Performance Metrics</h1>
+      <p>Real-time evaluation KPIs & Live Inference</p>
+    </header>
+
+    <section class="kpi-grid">
+      <div class="kpi-card">
+        <h3>AUC-ROC</h3>
+        <div class="kpi-value" id="auc-roc-value">--</div>
+      </div>
+      <div class="kpi-card">
+        <h3>Accuracy</h3>
+        <div class="kpi-value" id="accuracy-value">--</div>
+      </div>
+      <div class="kpi-card">
+        <h3>Precision</h3>
+        <div class="kpi-value" id="precision-value">--</div>
+      </div>
+      <div class="kpi-card">
+        <h3>Recall</h3>
+        <div class="kpi-value" id="recall-value">--</div>
+      </div>
+    </section>
+
+    <!-- Live Inference Section -->
+    <section class="inference-section">
+      <h2>Live Model Prediction Test</h2>
+      <p class="section-desc">Sample a random instance from <code>demo_samples.json</code> and evaluate it using <code>model.onnx</code>.</p>
+      
+      <div class="inference-card">
+        <div class="prediction-results">
+          <div class="result-box">
+            <span class="result-title">Actual Ground Truth</span>
+            <span class="badge" id="actual-label">--</span>
+          </div>
+          <div class="result-box">
+            <span class="result-title">Model Prediction</span>
+            <span class="badge" id="predicted-label">--</span>
+          </div>
+        </div>
+
+        <div class="action-container">
+          <button id="predict-btn" class="btn-primary" disabled>
+            Loading Model & Samples...
+          </button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
